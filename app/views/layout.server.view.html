@@ -44,12 +44,25 @@
 
 <body class="ng-cloak">
 	<header data-ng-include="'/modules/core/views/header.client.view.html'" class="navbar navbar-fixed-top navbar-inverse"></header>
-	<section class="content">
-		<section class="container">
-			{% block content %}{% endblock %}
-		</section>
-	</section>
-
+	{% block content %}{% endblock %}
+	<div class="footer">
+	  <div class="container">
+	  	<div class="row">
+	  		<div class="col-md-3 col-md-offset-1">
+	  			<p><a href="#">Media &nbsp; events</a></p>
+	  			<p><a href="#">Terms &nbsp; conditions</a></p>
+	  		</div>
+	  		<div class="col-md-3 col-md-offset-1">
+	  			<p><a href="#">Contact Us</a></p>
+	  			<p><a href="#">Safety &nbsp; Security</a></p>
+	  		</div>
+	  		<div class="col-md-3 col-md-offset-1">
+	  			<p><a href="#">Invite friends</a></p>
+	  			<p><a href="#">My Profile</a></p>
+	  		</div>
+	  	</div>
+	  </div>
+	</div>
 	<!--Embedding The User Object-->
 	<script type="text/javascript">
 		var user = {{ user | json | safe }};

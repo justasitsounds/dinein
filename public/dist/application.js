@@ -43,12 +43,38 @@ angular.element(document).ready(function () {
   //Then init the app
   angular.bootstrap(document, [ApplicationConfiguration.applicationModuleName]);
 });'use strict';
+// Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('about');'use strict';
 // Use Applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('core');'use strict';
 // Use applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('meals');'use strict';
 // Use Applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('users');'use strict';
+// About module config
+angular.module('about').run([
+  'Menus',
+  function (Menus) {
+    // Config logic
+    Menus.addMenuItem('topbar', 'About', 'about', 'item', '/about', true);
+  }
+]);'use strict';
+//Setting up route
+angular.module('about').config([
+  '$stateProvider',
+  function ($stateProvider) {
+    // About state routing
+    $stateProvider.state('about', {
+      url: '/about',
+      templateUrl: 'modules/about/views/about.client.view.html'
+    });
+  }
+]);'use strict';
+angular.module('about').controller('AboutController', [
+  '$scope',
+  function ($scope) {
+  }
+]);'use strict';
 // Setting up route
 angular.module('core').config([
   '$stateProvider',
@@ -217,16 +243,15 @@ angular.module('core').service('Menus', [function () {
       return this.menus[menuId];
     };
     //Adding the topbar menu
-    this.addMenu('topbar');
+    this.addMenu('topbar', true);
   }]);'use strict';
 // Configuring the Articles module
 angular.module('meals').run([
   'Menus',
   function (Menus) {
     // Set top bar menu items
-    Menus.addMenuItem('topbar', 'Meals', 'meals', 'dropdown', '/meals(/create)?', true);
-    Menus.addSubMenuItem('topbar', 'meals', 'List Meals', 'meals');
-    Menus.addSubMenuItem('topbar', 'meals', 'New Meal', 'meals/create');
+    Menus.addMenuItem('topbar', 'Meals', 'meals', 'item', '/meals(/list)?', true);  //Menus.addSubMenuItem('topbar', 'meals', 'List Meals', 'meals');
+                                                                                    //Menus.addSubMenuItem('topbar', 'meals', 'New Meal', 'meals/create');
   }
 ]);'use strict';
 //Setting up route
