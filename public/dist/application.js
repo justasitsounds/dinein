@@ -45,6 +45,8 @@ angular.element(document).ready(function () {
 });'use strict';
 // Use Applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('core');'use strict';
+// Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('meals');'use strict';
 // Use Applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('users');'use strict';
 // Setting up route
@@ -217,6 +219,99 @@ angular.module('core').service('Menus', [function () {
     //Adding the topbar menu
     this.addMenu('topbar');
   }]);'use strict';
+// Configuring the Articles module
+angular.module('meals').run([
+  'Menus',
+  function (Menus) {
+    // Set top bar menu items
+    Menus.addMenuItem('topbar', 'Meals', 'meals', 'dropdown', '/meals(/create)?');
+    Menus.addSubMenuItem('topbar', 'meals', 'List Meals', 'meals');
+    Menus.addSubMenuItem('topbar', 'meals', 'New Meal', 'meals/create');
+  }
+]);'use strict';
+//Setting up route
+angular.module('meals').config([
+  '$stateProvider',
+  function ($stateProvider) {
+    // Meals state routing
+    $stateProvider.state('listMeals', {
+      url: '/meals',
+      templateUrl: 'modules/meals/views/list-meals.client.view.html'
+    }).state('createMeal', {
+      url: '/meals/create',
+      templateUrl: 'modules/meals/views/create-meal.client.view.html'
+    }).state('viewMeal', {
+      url: '/meals/:mealId',
+      templateUrl: 'modules/meals/views/view-meal.client.view.html'
+    }).state('editMeal', {
+      url: '/meals/:mealId/edit',
+      templateUrl: 'modules/meals/views/edit-meal.client.view.html'
+    });
+  }
+]);'use strict';
+// Meals controller
+angular.module('meals').controller('MealsController', [
+  '$scope',
+  '$stateParams',
+  '$location',
+  'Authentication',
+  'Meals',
+  function ($scope, $stateParams, $location, Authentication, Meals) {
+    $scope.authentication = Authentication;
+    // Create new Meal
+    $scope.create = function () {
+      // Create new Meal object
+      var meal = new Meals({ name: this.name });
+      // Redirect after save
+      meal.$save(function (response) {
+        $location.path('meals/' + response._id);
+      }, function (errorResponse) {
+        $scope.error = errorResponse.data.message;
+      });
+      // Clear form fields
+      this.name = '';
+    };
+    // Remove existing Meal
+    $scope.remove = function (meal) {
+      if (meal) {
+        meal.$remove();
+        for (var i in $scope.meals) {
+          if ($scope.meals[i] === meal) {
+            $scope.meals.splice(i, 1);
+          }
+        }
+      } else {
+        $scope.meal.$remove(function () {
+          $location.path('meals');
+        });
+      }
+    };
+    // Update existing Meal
+    $scope.update = function () {
+      var meal = $scope.meal;
+      meal.$update(function () {
+        $location.path('meals/' + meal._id);
+      }, function (errorResponse) {
+        $scope.error = errorResponse.data.message;
+      });
+    };
+    // Find a list of Meals
+    $scope.find = function () {
+      $scope.meals = Meals.query();
+    };
+    // Find existing Meal
+    $scope.findOne = function () {
+      $scope.meal = Meals.get({ mealId: $stateParams.mealId });
+    };
+  }
+]);'use strict';
+//Meals service used to communicate Meals REST endpoints
+angular.module('meals').factory('Meals', [
+  '$resource',
+  function ($resource) {
+    return $resource('meals/:mealId', { mealId: '@_id' }, { update: { method: 'PUT' } });
+  }
+]);'use strict';
 // Config HTTP Error Handling
 angular.module('users').config([
   '$httpProvider',
