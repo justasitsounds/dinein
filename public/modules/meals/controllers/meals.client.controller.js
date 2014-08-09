@@ -2,7 +2,7 @@
 
 // Meals controller
 angular.module('meals').controller('MealsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Meals',
-	function($scope, $stateParams, $location, Authentication, Meals ) {
+	function($scope, $stateParams, $location, Authentication, Meals) {
 		$scope.authentication = Authentication;
 
 		// Create new Meal

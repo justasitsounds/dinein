@@ -2,6 +2,7 @@
 
 //Menu service used for managing  menus
 angular.module('core').service('Menus', [
+
 	function() {
 		// Define a set of default roles
 		this.defaultRoles = ['user'];
@@ -154,6 +155,6 @@ angular.module('core').service('Menus', [
 		};
 
 		//Adding the topbar menu
-		this.addMenu('topbar');
+		this.addMenu('topbar', true);
 	}
 ]);
