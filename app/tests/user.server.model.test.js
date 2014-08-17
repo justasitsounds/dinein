@@ -24,7 +24,9 @@ describe('User Model Unit Tests:', function() {
 			email: 'test@test.com',
 			username: 'username',
 			password: 'password',
-			provider: 'local'
+			provider: 'local',
+			location: 'waterloo',
+			dob: '22/02/1977'
 		});
 		user2 = new User({
 			firstName: 'Full',
