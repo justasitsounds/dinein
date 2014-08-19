@@ -27,8 +27,7 @@ describe('Meal Model Unit Tests:', function() {
 			username: 'username',
 			password: 'password',
 			provider: 'local',
-			dob: '01/01/1932',
-			location: 'nowhere'
+			dob: '01/01/1932'
 		});
 
 		guest = new User({
@@ -39,14 +38,13 @@ describe('Meal Model Unit Tests:', function() {
 			username: 'username2',
 			password: 'password',
 			provider: 'local',
-			dob: '01/01/1938',
-			location: 'nowheresVille'
+			dob: '01/01/1938'
 		});
 		guest.save(function(err) {
 			user.save(function(err) {
 				meal = new Meal({
 					name: 'Meal Name',
-					location: {
+					address: {
 						suburb: 'Waterloo'
 					},
 					host: user,
@@ -80,8 +78,8 @@ describe('Meal Model Unit Tests:', function() {
 			});
 		});
 
-		it('should be able to show an error when trying to save without location.suburb', function(done) {
-			meal.location.suburb = '';
+		it('should be able to show an error when trying to save without address.suburb', function(done) {
+			meal.address.suburb = '';
 
 			return meal.save(function(err) {
 				should.exist(err);
@@ -132,8 +130,6 @@ describe('Meal Model Unit Tests:', function() {
 				should.not.exist(err);
 				done();
 			});
-
-
 		});
 
 		it('should retrieve just fine', function(done) {

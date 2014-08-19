@@ -59,11 +59,42 @@ var UserSchema = new Schema({
 		default: '',
 		validate: [validateLocalStrategyPassword, 'Password should be longer']
 	},
-	location: {
-		type: String,
-		trim: true,
-		default: '',
-		validate: [validateLocalStrategyProperty, 'Please fill in your location']
+	address: {
+		unit: {
+			type: String,
+			trim: true,
+			default: ''
+		},
+		street: {
+			type: String,
+			trim: true,
+			default: ''
+		},
+		suburb: {
+			type: String,
+			trim: true,
+			default: ''
+		},
+		state: {
+			type: String,
+			trim: true,
+			default: ''
+		},
+		country: {
+			type: String,
+			trim: true,
+			default: ''
+		},
+		loc: {
+			type: {
+				type: String,
+				default: 'Point'
+			},
+			coordinates: {
+				type: [Number],
+				default: [0, 0]
+			}
+		}
 	},
 	dob: {
 		type: String,
@@ -95,6 +126,10 @@ var UserSchema = new Schema({
 		type: Date,
 		default: Date.now
 	}
+});
+
+UserSchema.index({
+	loc: '2dsphere'
 });
 
 /**

@@ -36,18 +36,41 @@ var MealSchema = new Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'User'
 	},
-	location: {
+	address: {
+		unit: {
+			type: String,
+			trim: true,
+			default: ''
+		},
+		street: {
+			type: String,
+			trim: true,
+			default: ''
+		},
 		suburb: {
 			type: String,
-			default: '',
-			required: 'location.suburb is required',
-			trim: true
+			trim: true,
+			required: ' Please fill in a suburb'
 		},
-		latitude: {
-			type: Number
+		state: {
+			type: String,
+			trim: true,
+			default: ''
 		},
-		longitude: {
-			type: Number
+		country: {
+			type: String,
+			trim: true,
+			default: ''
+		},
+		loc: {
+			type: {
+				type: String,
+				default: 'Point'
+			},
+			coordinates: {
+				type: [Number],
+				default: [0, 0]
+			}
 		}
 	},
 	description: {
