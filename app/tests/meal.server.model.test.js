@@ -49,7 +49,7 @@ describe('Meal Model Unit Tests:', function() {
 					},
 					host: user,
 					description: 'description',
-					startDate: new Date
+					startDate: new Date()
 				});
 				meal.guests.push(guest);
 				meal.save(function() {
@@ -61,7 +61,7 @@ describe('Meal Model Unit Tests:', function() {
 
 	});
 
-	context('Method Save', function() {
+	describe('Method Save', function() {
 		it('should be able to save without problems', function(done) {
 			return meal.save(function(err) {
 				should.not.exist(err);

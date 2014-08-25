@@ -35,6 +35,14 @@ The site application should run on the 3000 port so in your browser just go to [
 
 The site is developed using the [MeanJs Yeoman generator](http://meanjs.org/generator.html) which will generate the latest stable copy of the MEAN.JS boilerplate and supplies multiple sub-generators to ease your daily development cycles.
 
+### Environment variables:
+
+FACEBOOK_ID
+FACEBOOK_SECRET
+NODE_ENV {development|test|production} - not required, defaults to development
+
+
+
 
 MEAN.JS
 =======

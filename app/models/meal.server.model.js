@@ -15,7 +15,7 @@ var mealTagValidator = function(value) {
 	var vals = Object.keys(mealTags).map(function(key) {
 		return mealTags[key];
 	});
-	return _.difference(value, vals).length == 0;
+	return _.difference(value, vals).length === 0;
 };
 
 /**
@@ -50,7 +50,8 @@ var MealSchema = new Schema({
 		suburb: {
 			type: String,
 			trim: true,
-			required: ' Please fill in a suburb'
+			required: 'Please specify a suburb for the meal',
+			default: ''
 		},
 		state: {
 			type: String,
@@ -61,16 +62,16 @@ var MealSchema = new Schema({
 			type: String,
 			trim: true,
 			default: ''
+		}
+	},
+	loc: {
+		type: [Number],
+		validate: function(v) {
+			return true;
 		},
-		loc: {
-			type: {
-				type: String,
-				default: 'Point'
-			},
-			coordinates: {
-				type: [Number],
-				default: [0, 0]
-			}
+		index: {
+			type: '2dsphere',
+			sparse: true
 		}
 	},
 	description: {
@@ -94,6 +95,19 @@ var MealSchema = new Schema({
 	}
 });
 
+MealSchema.index({
+	address: {
+		loc: '2dsphere'
+	}
+});
+
 MealSchema.path('tags').validate(mealTagValidator, 'enum validator failed for path `{PATH}` with value `{VALUE}`');
+
+MealSchema.pre('save', function(next) {
+	if (this.isNew && Array.isArray(this.loc) && 0 === this.loc.length) {
+		this.loc = undefined;
+	}
+	next();
+});
 
 mongoose.model('Meal', MealSchema);

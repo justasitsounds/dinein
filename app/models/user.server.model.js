@@ -21,6 +21,11 @@ var validateLocalStrategyPassword = function(password) {
 	return (this.provider !== 'local' || (password && password.length > 6));
 };
 
+var addressValidator = function() {
+	return true;
+};
+
+
 /**
  * User Schema
  */
@@ -84,16 +89,16 @@ var UserSchema = new Schema({
 			type: String,
 			trim: true,
 			default: ''
+		}
+	},
+	loc: {
+		type: [Number],
+		validate: function(v) {
+			return true;
 		},
-		loc: {
-			type: {
-				type: String,
-				default: 'Point'
-			},
-			coordinates: {
-				type: [Number],
-				default: [0, 0]
-			}
+		index: {
+			type: '2dsphere',
+			sparse: true
 		}
 	},
 	dob: {
@@ -128,10 +133,6 @@ var UserSchema = new Schema({
 	}
 });
 
-UserSchema.index({
-	loc: '2dsphere'
-});
-
 /**
  * Hook a pre save method to hash the password
  */
@@ -140,7 +141,9 @@ UserSchema.pre('save', function(next) {
 		this.salt = new Buffer(crypto.randomBytes(16).toString('base64'), 'base64');
 		this.password = this.hashPassword(this.password);
 	}
-
+	if (this.isNew && Array.isArray(this.loc) && 0 === this.loc.length) {
+		this.loc = undefined;
+	}
 	next();
 });
 
